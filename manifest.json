@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Youtube Ad Skip",
+  "version": "1.0.0",
+  "description": "A simple extension to skip youtube ads.",
+  "icons": {},
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/watch*"],
+      "run_at": "document_start",
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["webNavigation", "activeTab", "tabs", "scripting"],
+  "host_permissions": ["*://*.youtube.com/*"] 
+}
