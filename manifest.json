@@ -11,14 +11,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/watch*"],
+      "matches": ["*://*.youtube.com/*"],
       "run_at": "document_start",
       "js": ["content.js"]
     }
   ],
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": ["webNavigation", "scripting"],
-  "host_permissions": ["*://*.youtube.com/watch*"]
+
+  "permissions": ["webNavigation", "scripting"]
 }
