@@ -3,7 +3,6 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(
   (details) => {
     console.log("URL changed: ", details.url);
     if (details.url.includes("youtube.com/watch")) {
-      console.log("includes works!");
       try {
         console.log("details.tabid: ", details.tabId);
         chrome.scripting.executeScript({

@@ -1,9 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "Youtube Ad Skip",
+  "name": "Youtube Ad Skipper",
   "version": "1.0.0",
-  "description": "A simple extension to skip youtube ads.",
-  "icons": {},
+  "description": "Skip YouTube ads - perfect for those who prefer a hands-off approach.",
+  "icons": {
+    "16": "icons/skipIcon16.png",
+    "32": "icons/skipIcon32.png",
+    "48": "icons/skipIcon48.png",
+    "128": "icons/skipIcon128.png"
+  },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/watch*"],
@@ -14,6 +19,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["webNavigation", "activeTab", "tabs", "scripting"],
-  "host_permissions": ["*://*.youtube.com/*"] 
+  "permissions": ["webNavigation", "scripting"],
+  "host_permissions": ["*://*.youtube.com/watch*"]
 }

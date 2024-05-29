@@ -1,5 +1,4 @@
-// 5/28 working code now. Testing and then shipping to production and adding the monetization part using Mellowtel. Remove uncessary console logs.
-
+// 5/28 need to revaluate permissions in manifest.json and if I really need them all
 {
   let intervalId;
   function clickSkipButton() {
@@ -28,6 +27,7 @@
 
   // Function to start observing the target node
   function startObserving() {
+    console.log("started to obsverve");
     const adProgressBar = document.querySelector(
       ".ytp-ad-persistent-progress-bar-container"
     );
@@ -40,7 +40,6 @@
         attributeOldValue: true, // Record old values
         attributeFilter: ["style"], // Only watch for changes in the 'style' attribute
       });
-      console.log("observer started");
     } else {
       setTimeout(startObserving, 500);
     }
