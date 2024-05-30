@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Youtube Ad Skipper",
+  "name": "MeSkip",
   "version": "1.0.0",
   "description": "Skip YouTube ads - perfect for those who prefer a hands-off approach.",
   "icons": {
@@ -15,7 +15,5 @@
       "run_at": "document_start",
       "js": ["content.js"]
     }
-  ],
-
-  "permissions": ["webNavigation", "scripting"]
+  ]
 }
