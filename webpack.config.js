@@ -2,17 +2,16 @@ const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  mode: "development", // Use 'production' for production builds
   entry: {
     background: path.join(__dirname, "src", "background.js"),
     mellowtel: path.join(__dirname, "src", "mellowtel.js"),
     content: path.join(__dirname, "src", "content.js"),
+    opt: path.join(__dirname, "src", "opt.js"),
   },
   output: {
     path: path.join(__dirname, "dist"),
     filename: "[name].js",
   },
-  watch: true,
   module: {
     rules: [
       {
