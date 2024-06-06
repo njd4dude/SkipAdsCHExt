@@ -7,6 +7,7 @@ module.exports = {
     mellowtel: path.join(__dirname, "src", "mellowtel.js"),
     content: path.join(__dirname, "src", "content.js"),
     opt: path.join(__dirname, "src", "opt.js"),
+    popup: path.join(__dirname, "src", "popup.js"),
   },
   output: {
     path: path.join(__dirname, "dist"),

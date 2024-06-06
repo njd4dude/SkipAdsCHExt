@@ -41,5 +41,27 @@ function startObserving() {
   }
 }
 
-// Start observing
-startObserving();
+// listen for changes in the "skip_ads" value in the chrome storage
+function skip_ads_listener() {
+  chrome.storage.onChanged.addListener(function (changes, areaName) {
+    console.log("changes: ", changes);
+    if (changes.skip_ads?.newValue === true) {
+      console.log("skip_Ads new value is true");
+      startObserving();
+    } else {
+      console.log("skip_Ads new value is false");
+      clearInterval(intervalId);
+    }
+  });
+}
+// startup calls
+console.log("content.js running");
+skip_ads_listener();
+// get the current state of the skip_ads value on startup and use that to determine if the observer should be started
+// "skip_ads" controls whether or not the content script runs
+chrome.storage.local.get("skip_ads", function (result) {
+  console.log("result: ", result.skip_ads);
+  if (result.skip_ads) {
+    startObserving();
+  }
+});

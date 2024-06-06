@@ -1,11 +1,7 @@
-// 6/1 left off here nee to add more the onboarding page to specify what the users are actually agreeeing to. Also trying to figure out what
-// is happening with the permissions since its saying request additonal permission to read and change all data on websites 
-// This is probably due to the fact that the manifest file is requestin <all_urls> permission for the mellowtel.js and the optional permissions and the opitonal host permissions
-// which this basically says all websites -> ["https://*/*"]
 import Mellowtel from "mellowtel";
 
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log("Extension installed");
+chrome.runtime.onInstalled.addListener(async (details) => {
+  console.log("Extension installed: ", details.reason);
   const currentVersion = chrome.runtime.getManifest().version;
   const newVersionKey = "newVersion";
   const updateShownKey = "updateShown";
