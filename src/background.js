@@ -1,36 +1,28 @@
 import Mellowtel from "mellowtel";
 
 chrome.runtime.onInstalled.addListener(async (details) => {
-  console.log("Extension installed: ", details.reason);
   const currentVersion = chrome.runtime.getManifest().version;
   const newVersionKey = "newVersion";
   const updateShownKey = "updateShown";
 
   // Check if this is a new version of the extension
   const previousVersion = await getFromStorage(newVersionKey);
-  console.log("previousVersion: ", previousVersion);
-  console.log("currentVersion: ", currentVersion);
+
   if (currentVersion !== previousVersion) {
-    console.log("--New version detected--");
-    console.log("-----------PROCESS----------------");
-    console.log("Updated from version", previousVersion, "to", currentVersion);
     // Save the new version to local storage
     await setInStorage(newVersionKey, currentVersion);
 
     // Check if we've already shown the update notification for this version
     const updateShown = await getFromStorage(updateShownKey);
-    console.log("updateShown: ", updateShown);
+
     if (!updateShown) {
       // Open a new tab with the update page
-      console.log("opening onboarding tab...");
       chrome.tabs.create({ url: "onboarding.html" }); // this page has the optIn button?
 
       // Set the flag so we don't show the update notification again
       await setInStorage(updateShownKey, true);
     }
-    console.log("-----------PROCESS----------------");
   } else {
-    console.log("No new version detected");
   }
 });
 
@@ -40,9 +32,6 @@ async function initMel() {
   try {
     const mellowtel = new Mellowtel("a4b864c8");
     await mellowtel.initBackground();
-    const hasOptedIn = await mellowtel.getOptInStatus();
-
-    console.log("mellowtel initBackground: ", { mellowtel, hasOptedIn });
   } catch (error) {
     console.error("Error initializing Mellowtel:", error);
   }

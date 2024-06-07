@@ -1,9 +1,11 @@
+// 6/6 need to fix this because it doesnt start observing unless user clicks on action icon. I think fixed check it seems good now! I added a disconnect observer line
+// right now im just trying to see the async/sync nature of the adding listeners part
 let intervalId;
 function clickSkipButton() {
   intervalId = setInterval(function () {
+    console.log("clicking skip button...");
     const skip_button = document.querySelector(".ytp-skip-ad-button");
     if (skip_button) {
-      console.log("Skip button found, clicking it");
       skip_button.click();
     }
   }, 1000);
@@ -23,7 +25,7 @@ const observer = new MutationObserver(handleStyleChanges);
 
 // Function to start observing the target node
 function startObserving() {
-  console.log("startObserving");
+  console.log("startObserving...");
   const adProgressBar = document.querySelector(
     ".ytp-ad-persistent-progress-bar-container"
   );
@@ -37,31 +39,61 @@ function startObserving() {
       attributeFilter: ["style"], // Only watch for changes in the 'style' attribute
     });
   } else {
+    console.log("progress bar not found retrying in 500ms");
     setTimeout(startObserving, 500);
   }
 }
 
 // listen for changes in the "skip_ads" value in the chrome storage
 function skip_ads_listener() {
-  chrome.storage.onChanged.addListener(function (changes, areaName) {
-    console.log("changes: ", changes);
-    if (changes.skip_ads?.newValue === true) {
-      console.log("skip_Ads new value is true");
-      startObserving();
-    } else {
-      console.log("skip_Ads new value is false");
-      clearInterval(intervalId);
-    }
+  console.log("setting up listener for skip_ads");
+  return new Promise((resolve, reject) => {
+    chrome.storage.onChanged.addListener(function (changes, areaName) {
+      console.log("change detected: ", changes);
+      if (changes.skip_ads?.newValue === true) {
+        console.log("going to start observer");
+        startObserving();
+      } else if (changes.skip_ads?.newValue === false) {
+        // I need to make it so that the observer stops observing when the skip_ads value is set to false
+        observer.disconnect();
+        console.log("disconnecting observer");
+      }
+    });
+    console.log("resolving skip_ads_listener");
+    resolve();
   });
 }
-// startup calls
-console.log("content.js running");
-skip_ads_listener();
+
 // get the current state of the skip_ads value on startup and use that to determine if the observer should be started
 // "skip_ads" controls whether or not the content script runs
-chrome.storage.local.get("skip_ads", function (result) {
-  console.log("result: ", result.skip_ads);
-  if (result.skip_ads) {
-    startObserving();
-  }
-});
+function firstLoad() {
+  console.log("firstLoad...");
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get("skip_ads", function (result) {
+      console.log("data found for result", result.skip_ads);
+      if (result.skip_ads === undefined) {
+        // set to true by default
+        chrome.storage.local.set({ skip_ads: true }); // this will automatically trigger the skip_ads_listener because a change is made, starting the observer
+        console.log("setting skip_ads to true ");
+      } else if (result.skip_ads === true) {
+        console.log("result.skip_ads is true so starting observer");
+        startObserving();
+      } else if (result.skip_ads === false) {
+        console.log(
+          "not going to skip ads and start observing because skip_ads is false"
+        );
+      }
+      console.log("end of firstLoad");
+      resolve();
+    });
+  });
+}
+
+// startup calls
+async function startup() {
+  console.log("starting up...");
+  await skip_ads_listener();
+  await firstLoad();
+}
+
+startup();
