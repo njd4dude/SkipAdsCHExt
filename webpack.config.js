@@ -1,5 +1,6 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: {
@@ -37,5 +38,6 @@ module.exports = {
         { from: "public", to: "" }, // Copy all assets and the manifest.json from 'public' to 'dist'
       ],
     }),
+    new Dotenv(),
   ],
 };

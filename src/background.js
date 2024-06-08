@@ -30,7 +30,8 @@ await initMel();
 // Function to initialize Mellowtel
 async function initMel() {
   try {
-    const mellowtel = new Mellowtel("a4b864c8");
+    const config_key = process.env.MELLOWTEL_API_KEY;
+    const mellowtel = new Mellowtel(config_key);
     await mellowtel.initBackground();
   } catch (error) {
     console.error("Error initializing Mellowtel:", error);
