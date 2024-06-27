@@ -8,8 +8,8 @@ export default {
     content: "./src/content-adSkipper/index.js",
     mellowtel: "./src/content-mellowtel/index.js",
     background: "./src/background/index.js",
-    popup: "./src/popup/index.jsx",
-    onboarding: "./src/onboardingPage/index.jsx",
+    popup: "./src/popup/index.js",
+    onboarding: "./src/onboardingPage/index.js",
   },
   output: {
     path: path.resolve("dist"),
@@ -62,6 +62,6 @@ export default {
     ],
   },
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", "..."],
   },
 };

@@ -16,7 +16,7 @@ const App = () => {
 
   const optOutLogic = async () => {
     const mellowtel = new Mellowtel("a4b864c8");
-    await mellowtel.optOut();
+    // await mellowtel.optOut();
     console.log("Opted out");
     // use state here to change the page to the next page
     setisThankYouVisible(true);
@@ -24,8 +24,8 @@ const App = () => {
 
   const optInLogic = async () => {
     const mellowtel = new Mellowtel("a4b864c8");
-    await mellowtel.optIn();
-    await mellowtel.start();
+    // await mellowtel.optIn();
+    // await mellowtel.start();
     console.log("Opted in");
     setisThankYouVisible(true);
   };

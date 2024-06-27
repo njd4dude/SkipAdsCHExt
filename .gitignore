@@ -1,3 +1,4 @@
 dist 
+dist-react
 node_modules 
 .env

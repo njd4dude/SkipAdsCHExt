@@ -7,7 +7,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
   // Check if this is a new version of the extension
   const previousVersion = await getFromStorage(newVersionKey);
-
   if (currentVersion !== previousVersion) {
     // Save the new version to local storage
     await setInStorage(newVersionKey, currentVersion);
@@ -18,7 +17,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     if (!updateShown) {
       // Open a new tab with the update page
       chrome.tabs.create({ url: "onboarding.html" }); // this page has the optIn button?
-     
+
       // Set the flag so we don't show the update notification again
       await setInStorage(updateShownKey, true);
     }
