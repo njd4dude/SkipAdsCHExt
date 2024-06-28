@@ -1,5 +1,5 @@
 // task: 6/7 just commited latest commit with the domcontent loaded event listener. Next step is to remove unessecary console logs and sumbit it for review for the store.
-
+// task: 6/27 I want to test out chaning the playback speed of the ad
 document.addEventListener("DOMContentLoaded", function () {
   let intervalId;
   function clickSkipButton() {
