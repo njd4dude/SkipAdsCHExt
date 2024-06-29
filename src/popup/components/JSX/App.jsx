@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "../CSS/App.css";
-// task implement tailwind css 6/28
+import icon from "/public/icons/128x128.png";
+// task 6/28: just finished creating the base ui for the popup need to add the speed up ad toggle button too!
+
 
 const App = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -34,21 +35,43 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1 className="title text-red-600 ">Ad Skipper</h1>
-      <div className="switch-holder">
-        <h3 className="switch-name text-blue-500">Skip Ads</h3>
-        <label className="switch">
-          <input
-            checked={isChecked}
-            onChange={(e) => handleCheckbox(e)}
-            type="checkbox"
-          />
-          <span className="slider round">
-            <span className="toggle-circle"></span>
-          </span>
-          <p className="toggle-text unselectable">OFF</p>
-        </label>
+    <div className="bg-[#272625] w-52 h-52 p-4 overflow-hidden">
+      <div className="flex justify-center items-center w-full h-1/3">
+        <img
+          className="w-6 object-contain mr-1"
+          src={icon}
+          alt="Ad Skipper Icon"
+        />
+        <h1 className="title text-white text-2xl font-bold">Ad Skipper</h1>
+      </div>
+      <div className="flex justify-center items-center mt-2 h-12 w-full">
+        <h3 className="text-sm text-[#c7c7c7] font-bold mr-4 ">Skip Ads</h3>
+        <div className="flex">
+          <div className="relative w-16 h-8">
+            <input
+              type="checkbox"
+              className="absolute h-full w-full cursor-pointer"
+              checked={isChecked}
+              onChange={(e) => handleCheckbox(e)}
+            />
+            <span
+              className={`pointer-events-none slider block w-full h-full ${isChecked ? "bg-blue-500" : "bg-gray-400"} transition duration-200 rounded-full relative`}
+            >
+              <span
+                className={`absolute left-1 bottom-1 bg-white w-6 h-6 rounded-full transition duration-200 transform ${
+                  isChecked ? "translate-x-8" : ""
+                }`}
+              ></span>
+              <p
+                className={`absolute text-xs font-bold right-2.5 top-1.5 text-white transition duration-200 ${isChecked ? "translate-x-8 " : ""}`}
+              >
+                OFF
+              </p>
+              {/* this is here for cosmetics makes it so that it looks like "OFF" is sliding behind the background */}
+              <div className="absolute w-12 h-12 -right-12 -bottom-2 bg-[#272625] "></div>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
