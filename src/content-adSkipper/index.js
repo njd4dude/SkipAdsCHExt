@@ -1,27 +1,60 @@
-// task: 6/7 just commited latest commit with the domcontent loaded event listener. Next step is to remove unessecary console logs and sumbit it for review for the store.
-// task: 6/27 I want to test out chaning the playback speed of the ad
+// task 6/28: Create an option in the popup to turn off the speed up ad feature
 document.addEventListener("DOMContentLoaded", function () {
   let intervalId;
+  const videoObserver = new MutationObserver(handleVideoChanges);
+  const observer = new MutationObserver(handleStyleChanges);
+  const videoPlayBackRate = 4;
+
+  //#region DOM MANIPULATION FUNCTIONS
   function clickSkipButton() {
     intervalId = setInterval(function () {
       const skip_button = document.querySelector(".ytp-skip-ad-button");
       if (skip_button) {
         skip_button.click();
+        console.log("skip button clicked");
       }
     }, 1000);
+  }
+
+  function speedUpAd() {
+    const video = document.querySelector("video");
+    if (video) {
+      console.log("video element exists: ", video);
+      video.playbackRate = videoPlayBackRate;
+      videoObserver.observe(video, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: ["src"],
+      });
+    }
+  }
+  //#endregion DOM MANIPULATION FUNCTIONS
+
+  //#region  MUTATION CALLBACK FUNCTIONS
+  function handleVideoChanges(mutationsList) {
+    console.log("video src changed: ", mutationsList);
+    mutationsList[0].target.playbackRate = videoPlayBackRate;
+    console.log("playback rate changed to 2x....");
   }
 
   // Function to handle changes in the style property of the target element
   function handleStyleChanges(mutationsList) {
     if (mutationsList[0].target.style.display === "") {
+      console.log("there is an ad playing, click skip button and speed up ad");
       clickSkipButton();
+      speedUpAd();
     } else {
+      console.log("no more ad playing");
+
       clearInterval(intervalId);
+
+      const video = document.querySelector("video");
+      video.playbackRate = 1;
+      videoObserver.disconnect();
+      console.log("disconnected video observer!");
     }
   }
-
-  // Create a new MutationObserver instance with the callback function
-  const observer = new MutationObserver(handleStyleChanges);
+  //#endregion MUTATION CALLBACK FUNCTIONS
 
   // Function to start observing the target node
   function startObserving() {
@@ -30,7 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     if (adProgressBar) {
       if (adProgressBar.style.display === "") {
+        console.log(
+          "there is an ad playing, click skip button and speed up ad...."
+        );
         clickSkipButton();
+        speedUpAd();
       }
       observer.observe(adProgressBar, {
         attributes: true,
@@ -50,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
           startObserving();
         } else if (changes.skip_ads?.newValue === false) {
           observer.disconnect();
+          console.log("ad detection observer disconnected");
         }
       });
 
@@ -62,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function firstLoad() {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get("skip_ads", function (result) {
+        console.log("skip_ads value: ", result.skip_ads);
         if (result.skip_ads === undefined) {
           // set to true by default
           chrome.storage.local.set({ skip_ads: true }); // this will automatically trigger the skip_ads_listener because a change is made, starting the observer
@@ -80,6 +119,5 @@ document.addEventListener("DOMContentLoaded", function () {
     await firstLoad();
     console.log("Content script loaded");
   }
-
   startup();
 });

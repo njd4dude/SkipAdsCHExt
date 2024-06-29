@@ -49,8 +49,9 @@ export default {
         },
       },
       {
-        test: /\.css$/, // Add this rule to handle CSS files
-        use: ["style-loader", "css-loader"],
+        test: /\.css$/i, // Add this rule to handle CSS files
+        exclude: /node_modules/,
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
         test: /\.png$/, // Rule for PNG files

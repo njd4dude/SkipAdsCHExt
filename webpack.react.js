@@ -1,7 +1,7 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
-const reactDirectory = "onboardingPage"; //CHANGE THIS FOLDER for loading new react page.
+const reactDirectory = "popup"; //CHANGE THIS FOLDER for loading new react page.
 
 export default {
   mode: "development",
@@ -10,6 +10,7 @@ export default {
   output: {
     path: path.resolve("dist-react"),
     filename: "bundle.js", // this filename is used in the devserver
+    clean: true, // this option deletes the dist folder before creating a new one
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -35,7 +36,7 @@ export default {
       },
       {
         test: /\.css$/, // Add this rule to handle CSS files
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
         test: /\.png$/, // Rule for PNG files
