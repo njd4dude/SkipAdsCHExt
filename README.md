@@ -1,2 +1,2 @@
 If you want to use this code you must have your own .env file with the api key
-The branch react-webpack is the template for creating new chrome extensions.
+The branch react-webpack is the template for creating new chrome extensions. This uses regualr css but doesn't have tailwindcss implemented into it.
