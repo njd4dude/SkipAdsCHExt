@@ -7,15 +7,10 @@ import Thanks from "./Thanks";
 const App = () => {
   const [isThankYouVisible, setisThankYouVisible] = useState(false);
 
-  useEffect(() => {
-    console.log("Thank you page. ", isThankYouVisible);
-  }, [isThankYouVisible]);
-
   const optOutLogic = async () => {
     const mellowtel = new Mellowtel("a4b864c8");
     await mellowtel.optOut();
-    console.log("Opted out");
-    // use state here to change the page to the next page
+
     setisThankYouVisible(true);
   };
 
@@ -23,11 +18,9 @@ const App = () => {
     const mellowtel = new Mellowtel("a4b864c8");
     await mellowtel.optIn();
     await mellowtel.start();
-    console.log("Opted in");
+
     setisThankYouVisible(true);
   };
-
-  console.log("icon: ", icon);
 
   return isThankYouVisible ? (
     <Thanks />

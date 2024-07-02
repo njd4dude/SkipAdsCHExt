@@ -2,15 +2,14 @@ import React from "react";
 
 const ToggleSwitch = ({ name, localStorageName, state, setState }) => {
   const handleCheckbox = async (e) => {
-    console.log(name, e.target.checked);
     chrome.storage.local.set({ [localStorageName]: e.target.checked });
     setState(e.target.checked);
   };
 
   return (
-    <div className="button-container flex justify-center items-center mt-2 h-12 w-full">
-      <h3 className="text-sm text-[#c7c7c7] font-bold mr-4 ">{name}</h3>
-      <div className="relative w-16 h-8">
+    <div className="button-container flex justify-between items-center mt-2 h-12 w-full ">
+      <h3 className="text-sm text-[#e7e7e7] font-bold mr-4  ">{name}</h3>
+      <div className="relative w-16 h-8  ">
         <input
           type="checkbox"
           className="absolute h-full w-full cursor-pointer"

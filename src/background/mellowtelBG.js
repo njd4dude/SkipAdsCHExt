@@ -16,12 +16,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
     if (!updateShown) {
       // Open a new tab with the update page
-      chrome.tabs.create({ url: "onboarding.html" }); // this page has the optIn button?
+      chrome.tabs.create({ url: "onboarding.html" });
 
       // Set the flag so we don't show the update notification again
       await setInStorage(updateShownKey, true);
     }
-  } else {
   }
 });
 
