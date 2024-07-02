@@ -7,13 +7,16 @@ document.addEventListener("DOMContentLoaded", function () {
   let videoPlayBackRate = 2;
 
   //#region DOM MANIPULATION FUNCTIONS
+
   function clickSkipButton() {
+    let i = 0;
     intervalId = setInterval(function () {
-      console.log("looking for skip button");
+      console.log("looking for skip button", i++);
       const skip_button = document.querySelector(".ytp-skip-ad-button");
       if (skip_button) {
         skip_button.click();
         console.log("skip button clicked");
+        clearInterval(intervalId);
       }
     }, 1000);
   }
@@ -61,6 +64,17 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   //#endregion MUTATION CALLBACK FUNCTIONS
 
+  function resetSkipAds() {
+    console.log("resetSkipAds called");
+    clearInterval(intervalId);
+  }
+  function resetSpeedUp() {
+    console.log("resetSpeedUp called");
+    const video = document.querySelector("video");
+    video.playbackRate = 1;
+    videoSrcObserver.disconnect();
+  }
+
   // Function to start observing the target node
   function startAdObserving() {
     console.log(
@@ -79,19 +93,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (adProgressBar.style.display === "") {
         console.log("there is an ad playing..");
 
-        if (skip_ads_enabled) {
-          clickSkipButton();
-        } else {
-          clearInterval(intervalId);
-        }
-
-        if (speed_up_enabled) {
-          speedUpAd();
-        } else {
-          const video = document.querySelector("video");
-          video.playbackRate = 1;
-          videoSrcObserver.disconnect();
-        }
+        if (skip_ads_enabled) clickSkipButton();
+        if (speed_up_enabled) speedUpAd();
       }
 
       adObserver.observe(adProgressBar, {
@@ -100,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         attributeFilter: ["style"],
       });
     } else {
-      console.log("no progress bar found, retrying in 500ms....");
       setTimeout(startAdObserving, 500);
     }
   }
@@ -109,25 +111,29 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("skip ads listener called");
     return new Promise((resolve, reject) => {
       chrome.storage.onChanged.addListener(function (changes, areaName) {
-        console.log("changes: ", changes);
-        if (changes.skip_ads?.newValue === true) {
-          skip_ads_enabled = true;
-        } else if (changes.skip_ads?.newValue === false) {
-          skip_ads_enabled = false;
-        }
+        if (changes.skip_ads || changes.speed_up) {
+          console.log("changes: ", changes);
+          if (changes.skip_ads?.newValue === true) {
+            skip_ads_enabled = true;
+          } else if (changes.skip_ads?.newValue === false) {
+            skip_ads_enabled = false;
+            resetSkipAds();
+          }
 
-        if (changes.speed_up?.newValue === true) {
-          speed_up_enabled = true;
-        } else if (changes.speed_up?.newValue === false) {
-          speed_up_enabled = false;
-        }
+          if (changes.speed_up?.newValue === true) {
+            speed_up_enabled = true;
+          } else if (changes.speed_up?.newValue === false) {
+            speed_up_enabled = false;
+            resetSpeedUp();
+          }
 
-        if (skip_ads_enabled === false && speed_up_enabled === false) {
-          console.log("disconnecting adObserver");
-          adObserver.disconnect();
-        } else {
-          console.log("starting adObserver in setup_listeners");
-          startAdObserving();
+          if (skip_ads_enabled === false && speed_up_enabled === false) {
+            console.log("disconnecting adObserver");
+            adObserver.disconnect();
+          } else {
+            console.log("starting adObserver in setup_listeners");
+            startAdObserving();
+          }
         }
       });
       resolve();
@@ -173,5 +179,3 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   startup();
 });
-
-//6/30 left off here bouta push to github

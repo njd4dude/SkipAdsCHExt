@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import icon from "/public/icons/128x128.png";
-// task 6/28: just finished creating the base ui for the popup need to add the speed up ad toggle button too!
 import ToggleSwitch from "./ToggleSwitch";
 
 const App = () => {

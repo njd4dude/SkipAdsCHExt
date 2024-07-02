@@ -3,9 +3,6 @@ import { useEffect, useState } from "react";
 import "../CSS/App.css";
 import icon from "/public/icons/128x128.png";
 import Thanks from "./Thanks";
-// 6/26 also want to make a better seperate dev enviromment for testing jsx code
-// like i could have a seperate webpack config that mainly just test which jsx
-// file I pick
 
 const App = () => {
   const [isThankYouVisible, setisThankYouVisible] = useState(false);
