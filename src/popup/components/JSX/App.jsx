@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import icon from "/public/icons/128x128.png";
 import ToggleSwitch from "./ToggleSwitch";
 import Mellowtel from "mellowtel";
-// task 7/1 add a settings page where users can opt out
+// task 7/1: reviewing code before publishing to web store
+// next task 7/11: add a mute ad feature
 const App = () => {
   const [adSkip, setAdSkip] = useState(false);
-  const [videoPlayBackRate, setVideoPlayBackRate] = useState(false);
+  const [speedUp, setSpeedUp] = useState(false);
+  const [muteAd, setMuteAd] = useState(false);
+
   const [settingsLink, setSettingsLink] = useState("");
 
   useEffect(() => {
@@ -17,17 +20,23 @@ const App = () => {
       const speed_up_state = (await chrome.storage.local.get("speed_up"))[
         "speed_up"
       ];
+      const mute_ads_state = (await chrome.storage.local.get("mute_ads"))[
+        "mute_ads"
+      ];
 
       // if its the users first time, by default set the skip_ads to true
       if (skip_ads_state === undefined) {
         await chrome.storage.local.set({ skip_ads: true });
         await chrome.storage.local.set({ speed_up: true });
+        await chrome.storage.local.set({ mute_ads: true });
         setAdSkip(true);
-        setVideoPlayBackRate(true);
+        setSpeedUp(true);
+        setMuteAd(true);
       } else {
         // if its not the users first time, set to current state from storage
         setAdSkip(skip_ads_state);
-        setVideoPlayBackRate(speed_up_state);
+        setSpeedUp(speed_up_state);
+        setMuteAd(mute_ads_state);
       }
     };
     async function generateOptLink() {
@@ -47,7 +56,7 @@ const App = () => {
   };
 
   return (
-    <div className="bg-[#272625] w-56 h-64 p-4 overflow-hidden relative">
+    <div className="bg-[#272625] w-56 h-80 p-4 overflow-hidden relative">
       <div className="flex justify-center items-center w-full h-1/3">
         <img
           className="w-6 object-contain mr-1"
@@ -65,8 +74,14 @@ const App = () => {
       <ToggleSwitch
         name={"Speed Up Ad"}
         localStorageName={"speed_up"}
-        state={videoPlayBackRate}
-        setState={setVideoPlayBackRate}
+        state={speedUp}
+        setState={setSpeedUp}
+      />
+      <ToggleSwitch
+        name={"Mute Ad"}
+        localStorageName={"mute_ads"}
+        state={muteAd}
+        setState={setMuteAd}
       />
       {settingsLink && (
         <div className="absolute bottom-2 right-2 text-gray-400">
