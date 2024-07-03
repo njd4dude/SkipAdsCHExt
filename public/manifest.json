@@ -29,5 +29,5 @@
     }
   ],
   "permissions": ["storage", "tabs", "declarativeNetRequest"],
-  "host_permissions": ["\u003Call_urls\u003E"]
+  "host_permissions": ["<all_urls>"]
 }
