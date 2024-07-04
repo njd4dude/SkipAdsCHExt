@@ -5,8 +5,20 @@ document.addEventListener("DOMContentLoaded", function () {
   let skip_ads_enabled = false;
   let speed_up_enabled = false;
   let mute_ads_enabled = false;
-  let videoPlayBackRate = 2;
+  let videoPlayBackRate = 1;
 
+
+  //task 7/3 the ones that .get from storage like these should be in the bg scirpt
+  function getSpeedfromStorage() {
+    chrome.storage.local.get("speed", function (result) {
+      if (result.speed === undefined) {
+        chrome.storage.local.set({ speed: 4 });
+        videoPlayBackRate = 4;
+      } else {
+        videoPlayBackRate = result.speed;
+      }
+    });
+  }
   //#region DOM MANIPULATION FUNCTIONS
 
   function clickSkipButton() {
@@ -85,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to start observing the target node
   function startAdObserving() {
+    console.log("startAdObserving videoplaybackrate", videoPlayBackRate);
     const adProgressBar = document.querySelector(
       ".ytp-ad-persistent-progress-bar-container"
     );
@@ -109,7 +122,18 @@ document.addEventListener("DOMContentLoaded", function () {
   function setup_listeners() {
     return new Promise((resolve, reject) => {
       chrome.storage.onChanged.addListener(function (changes, areaName) {
-        if (changes.skip_ads || changes.speed_up || changes.mute_ads) {
+        if (
+          changes.skip_ads ||
+          changes.speed_up ||
+          changes.mute_ads ||
+          changes.speed
+        ) {
+          console.log("changes", changes);
+          if (changes.speed?.newValue !== undefined) {
+            console.log("it is true the change is in speed");
+            videoPlayBackRate = changes.speed.newValue;
+          }
+
           if (changes.skip_ads?.newValue === true) {
             skip_ads_enabled = true;
           } else if (changes.skip_ads?.newValue === false) {
@@ -146,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  //task 7/3 I jus thought about how i coudl actually set the default to true in bacgkround script instead
   function firstLoad() {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get(
@@ -183,6 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function startup() {
     await setup_listeners();
     await firstLoad();
+    getSpeedfromStorage();
   }
   startup();
 });
