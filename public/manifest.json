@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Ad Skipper - Skip YouTube Ads Hands Free",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Skip YouTube ads automatically. No need to click the skip button or wait for the timer to finish.",
   "icons": {
     "16": "icons/16x16.png",

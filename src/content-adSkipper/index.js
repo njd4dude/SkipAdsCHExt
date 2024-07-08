@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let mute_ads_enabled = false;
   let videoPlayBackRate = 1;
 
-
-  //task 7/3 the ones that .get from storage like these should be in the bg scirpt
+  //task 7/3 the ones that chrome.storage.local.get from storage like these should be in the bg scirpt
+  //task 7/7: youtube has now detected skip ads button is being pressed programtically.. maybe if i change is so that it clicks when the timer is over. WORKS!!!
   function getSpeedfromStorage() {
     chrome.storage.local.get("speed", function (result) {
       if (result.speed === undefined) {
@@ -23,10 +23,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function clickSkipButton() {
     intervalId = setInterval(function () {
-      const skip_button = document.querySelector(".ytp-skip-ad-button");
-      if (skip_button) {
-        skip_button.click();
-        clearInterval(intervalId);
+      const previewAd = document.querySelector(".ytp-preview-ad");
+      if (previewAd) {
+        console.log("previewAd is ", previewAd);
+        if (previewAd.style.display === "none") {
+          const skip_button = document.querySelector(".ytp-skip-ad-button");
+          if (skip_button) {
+            setTimeout(() => {
+              skip_button.click();
+              clearInterval(intervalId);
+            }, 500);
+          }
+        }
+      } else {
+        console.log("no previewAd");
       }
     }, 1000);
   }
@@ -97,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to start observing the target node
   function startAdObserving() {
-    console.log("startAdObserving videoplaybackrate", videoPlayBackRate);
     const adProgressBar = document.querySelector(
       ".ytp-ad-persistent-progress-bar-container"
     );
@@ -128,9 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
           changes.mute_ads ||
           changes.speed
         ) {
-          console.log("changes", changes);
           if (changes.speed?.newValue !== undefined) {
-            console.log("it is true the change is in speed");
             videoPlayBackRate = changes.speed.newValue;
           }
 
@@ -206,9 +213,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // startup calls
   async function startup() {
+    getSpeedfromStorage();
     await setup_listeners();
     await firstLoad();
-    getSpeedfromStorage();
   }
   startup();
 });

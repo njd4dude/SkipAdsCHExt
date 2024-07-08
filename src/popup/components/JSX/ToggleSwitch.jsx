@@ -30,14 +30,12 @@ const ToggleSwitch = ({ name, localStorageName, state, setState }) => {
   };
 
   const handleSpeedUp = () => {
-    console.log("speed up");
     const newSpeed = speed >= 4 ? 1 : speed + 1;
     setSpeed(newSpeed);
     chrome.storage.local.set({ speed: newSpeed });
   };
 
   const handleSpeedDown = () => {
-    console.log("speed down");
     const newSpeed = speed <= 1 ? 4 : speed - 1;
     setSpeed(newSpeed);
     chrome.storage.local.set({ speed: newSpeed });
@@ -72,7 +70,7 @@ const ToggleSwitch = ({ name, localStorageName, state, setState }) => {
             onChange={(e) => handleCheckbox(e)}
           />
           <span
-            className={`pointer-events-none slider block w-full h-full ${state ? "bg-blue-500" : "bg-gray-400"} transition duration-200 rounded-full relative`}
+            className={`pointer-events-none slider block w-full h-full ${state ? "bg-red-500" : "bg-gray-400"} transition duration-200 rounded-full relative`}
           >
             <span
               className={`absolute left-1 bottom-1 bg-white w-6 h-6 rounded-full transition duration-200 transform ${
