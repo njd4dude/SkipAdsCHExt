@@ -1,3 +1,4 @@
+// task 7/10 remove ad skipper functioanlity it doesnt work anymore
 document.addEventListener("DOMContentLoaded", function () {
   let intervalId;
   const videoSrcObserver = new MutationObserver(videoSrcObserverHandler);
@@ -8,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let videoPlayBackRate = 1;
 
   //task 7/3 the ones that chrome.storage.local.get from storage like these should be in the bg scirpt
-  //task 7/7: youtube has now detected skip ads button is being pressed programtically.. maybe if i change is so that it clicks when the timer is over. WORKS!!!
+
   function getSpeedfromStorage() {
     chrome.storage.local.get("speed", function (result) {
       if (result.speed === undefined) {
@@ -25,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
     intervalId = setInterval(function () {
       const previewAd = document.querySelector(".ytp-preview-ad");
       if (previewAd) {
-        console.log("previewAd is ", previewAd);
         if (previewAd.style.display === "none") {
           const skip_button = document.querySelector(".ytp-skip-ad-button");
           if (skip_button) {
@@ -35,8 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 500);
           }
         }
-      } else {
-        console.log("no previewAd");
       }
     }, 1000);
   }
