@@ -30,13 +30,13 @@ const ToggleSwitch = ({ name, localStorageName, state, setState }) => {
   };
 
   const handleSpeedUp = () => {
-    const newSpeed = speed >= 4 ? 1 : speed + 1;
+    const newSpeed = speed >= 16 ? 1 : speed + 1;
     setSpeed(newSpeed);
     chrome.storage.local.set({ speed: newSpeed });
   };
 
   const handleSpeedDown = () => {
-    const newSpeed = speed <= 1 ? 4 : speed - 1;
+    const newSpeed = speed <= 1 ? 16 : speed - 1;
     setSpeed(newSpeed);
     chrome.storage.local.set({ speed: newSpeed });
   };
@@ -45,7 +45,7 @@ const ToggleSwitch = ({ name, localStorageName, state, setState }) => {
     <div className="relative">
       <div className="button-container flex justify-between items-center mt-2 h-12 w-full relative ">
         <div className="flex items-center">
-          <h3 className="text-sm text-[#e7e7e7] font-bold mr-2">{name}</h3>
+          <h3 className="text-sm text-[#e7e7e7] font-bold mr-6">{name}</h3>
           {name === "Speed Up Ad" && (
             <div className="text-gray-300 flex flex-col pointer opacity-50 hover:opacity-100 duration-200">
               <span className="cursor-pointer -mb-1 " onClick={handleSpeedUp}>

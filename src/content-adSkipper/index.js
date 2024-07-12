@@ -1,9 +1,7 @@
-// task 7/10 remove ad skipper functioanlity it doesnt work anymore
+// task 7/10 remove ad skipper functioanlity it doesnt work anymore.. might move on to new app it seems they keep detecitng speed if its over 4x
 document.addEventListener("DOMContentLoaded", function () {
-  let intervalId;
   const videoSrcObserver = new MutationObserver(videoSrcObserverHandler);
   const adObserver = new MutationObserver(adObserverHandler);
-  let skip_ads_enabled = false;
   let speed_up_enabled = false;
   let mute_ads_enabled = false;
   let videoPlayBackRate = 1;
@@ -21,23 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   //#region DOM MANIPULATION FUNCTIONS
-
-  function clickSkipButton() {
-    intervalId = setInterval(function () {
-      const previewAd = document.querySelector(".ytp-preview-ad");
-      if (previewAd) {
-        if (previewAd.style.display === "none") {
-          const skip_button = document.querySelector(".ytp-skip-ad-button");
-          if (skip_button) {
-            setTimeout(() => {
-              skip_button.click();
-              clearInterval(intervalId);
-            }, 500);
-          }
-        }
-      }
-    }, 1000);
-  }
 
   function speedUpAd() {
     const video = document.querySelector("video");
@@ -77,20 +58,15 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to handle changes in the style property of the target element. Bascially detects when an ad is playing.
   function adObserverHandler(mutationsList) {
     if (mutationsList[0].target.style.display === "") {
-      if (skip_ads_enabled) clickSkipButton();
       if (speed_up_enabled) speedUpAd();
       if (mute_ads_enabled) muteAd();
     } else {
-      resetSkipAds();
       resetSpeedUp();
       resetMuteAds();
     }
   }
   //#endregion MUTATION CALLBACK FUNCTIONS
 
-  function resetSkipAds() {
-    clearInterval(intervalId);
-  }
   function resetSpeedUp() {
     const video = document.querySelector("video");
     video.playbackRate = 1;
@@ -111,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (adProgressBar) {
       //ad playing...
       if (adProgressBar.style.display === "") {
-        if (skip_ads_enabled) clickSkipButton();
         if (speed_up_enabled) speedUpAd();
         if (mute_ads_enabled) muteAd();
       }
@@ -129,21 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function setup_listeners() {
     return new Promise((resolve, reject) => {
       chrome.storage.onChanged.addListener(function (changes, areaName) {
-        if (
-          changes.skip_ads ||
-          changes.speed_up ||
-          changes.mute_ads ||
-          changes.speed
-        ) {
+        if (changes.speed_up || changes.mute_ads || changes.speed) {
           if (changes.speed?.newValue !== undefined) {
             videoPlayBackRate = changes.speed.newValue;
-          }
-
-          if (changes.skip_ads?.newValue === true) {
-            skip_ads_enabled = true;
-          } else if (changes.skip_ads?.newValue === false) {
-            skip_ads_enabled = false;
-            resetSkipAds();
           }
 
           if (changes.speed_up?.newValue === true) {
@@ -160,11 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
             resetMuteAds();
           }
 
-          if (
-            skip_ads_enabled === false &&
-            speed_up_enabled === false &&
-            mute_ads_enabled === false
-          ) {
+          if (speed_up_enabled === false && mute_ads_enabled === false) {
             adObserver.disconnect();
           } else {
             startAdObserving();
@@ -179,14 +138,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function firstLoad() {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get(
-        ["skip_ads", "speed_up", "mute_ads"],
+        ["speed_up", "mute_ads"],
         async function (result) {
-          if (result.skip_ads === undefined) {
-            await chrome.storage.local.set({ skip_ads: true });
-          } else if (result.skip_ads === true) {
-            skip_ads_enabled = true;
-          }
-
           if (result.speed_up === undefined) {
             await chrome.storage.local.set({ speed_up: true });
           } else if (result.speed_up === true) {
@@ -199,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
             mute_ads_enabled = true;
           }
 
-          if (skip_ads_enabled || speed_up_enabled || mute_ads_enabled) {
+          if (speed_up_enabled || mute_ads_enabled) {
             startAdObserving();
           }
 
