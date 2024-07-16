@@ -6,10 +6,7 @@ import Dotenv from "dotenv-webpack";
 export default {
   entry: {
     content: "./src/content-adSkipper/index.js",
-    mellowtel: "./src/content-mellowtel/index.js",
-    background: "./src/background/index.js",
     popup: "./src/popup/index.js",
-    onboarding: "./src/onboardingPage/index.js",
   },
   output: {
     path: path.resolve("dist"),
@@ -22,12 +19,7 @@ export default {
       filename: "popup.html",
       chunks: ["popup"],
     }),
-    new HtmlWebpackPlugin({
-      template: "src/onboardingPage/index.html",
-      filename: "onboarding.html",
-      chunks: ["onboarding"],
-      favicon: "public/icons/128x128.png",
-    }),
+
     new CopyPlugin({
       patterns: [{ from: path.resolve("public"), to: path.resolve("dist") }],
     }),

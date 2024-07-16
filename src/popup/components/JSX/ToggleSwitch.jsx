@@ -30,13 +30,13 @@ const ToggleSwitch = ({ name, localStorageName, state, setState }) => {
   };
 
   const handleSpeedUp = () => {
-    const newSpeed = speed >= 16 ? 1 : speed + 1;
+    const newSpeed = speed >= 4 ? 1 : speed + 1;
     setSpeed(newSpeed);
     chrome.storage.local.set({ speed: newSpeed });
   };
 
   const handleSpeedDown = () => {
-    const newSpeed = speed <= 1 ? 16 : speed - 1;
+    const newSpeed = speed <= 1 ? 4 : speed - 1;
     setSpeed(newSpeed);
     chrome.storage.local.set({ speed: newSpeed });
   };

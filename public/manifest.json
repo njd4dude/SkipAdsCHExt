@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Youtube Ad Speedster",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Speed up ads on youtube.",
   "icons": {
     "16": "icons/16x16.png",
@@ -12,22 +12,13 @@
   "action": {
     "default_popup": "popup.html"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
+
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
       "run_at": "document_start",
       "js": ["content.js"]
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["mellowtel.js"],
-      "run_at": "document_start",
-      "all_frames": true
     }
   ],
-  "permissions": ["storage", "tabs", "declarativeNetRequest"],
-  "host_permissions": ["<all_urls>"]
+  "permissions": ["storage"]
 }
