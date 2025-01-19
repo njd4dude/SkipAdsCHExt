@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Youtube Ad Speedster",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Speed up ads on youtube.",
   "icons": {
     "16": "icons/16x16.png",

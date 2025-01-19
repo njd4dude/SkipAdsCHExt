@@ -1,7 +1,7 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
-const reactDirectory = "popup"; //CHANGE THIS FOLDER for loading new react page.
+const reactDirectory = "webpage"; //CHANGE THIS FOLDER for loading new react page.
 
 export default {
   mode: "development",
